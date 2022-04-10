@@ -1,3 +1,4 @@
+using FriendsLesson.Repository;
 using FriendsLessons.DbModels;
 using FriendsLessons.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +21,7 @@ namespace FriendsLesson
 {
     public class Startup
     {
+        private const string _defaultCorsPolicyName = "localhost";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,13 +36,27 @@ namespace FriendsLesson
                 => options.UseSqlServer("data source=.;initial catalog=frienslessons;Integrated Security=SSPI"));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ILessonRepository, LessonRepository>();
 
             services.AddControllers();
             services.AddMvcCore()
                 .AddJsonOptions(opions =>
-                    opions.JsonSerializerOptions.ReferenceHandler =  System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
+                    opions.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _defaultCorsPolicyName,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:4200");
+                                  });
+            });
+
+
+         
 
 
             services.AddSwaggerGen(c =>
@@ -64,6 +80,8 @@ namespace FriendsLesson
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(_defaultCorsPolicyName);
 
             app.UseEndpoints(endpoints =>
             {

@@ -21,6 +21,7 @@ namespace FriendsLessons.DbModels
 
         public DbSet<Course> Courses { get; set; }
 
+        public DbSet<Friendship> Friendships { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

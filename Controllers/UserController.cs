@@ -11,44 +11,39 @@ using System.Threading.Tasks;
 
 namespace FriendsLessons.Controllers
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository UserRepository;
         private readonly IMapper Mapper;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
             this.UserRepository = userRepository;
             this.Mapper = mapper;
         }
 
         [HttpGet]
+        [Route("api/[controller]")]
         public ActionResult<IEnumerable<UserDto>> GetList()
         {
             var users =  this.UserRepository.GetList().ToList();
-            var ep =  this.Mapper.Map<List<UserDto>>(users);
-            return ep;
+            return this.Mapper.Map<List<UserDto>>(users);
         }
 
         [HttpGet]
-        [Route("/{id}")]
-        public ActionResult<UserDto> GetById(int id)
+        [Route("api/[controller]/friendship")]
+        public ActionResult<IDictionary<string, List<UserDto>>> GetAllFrienships()
         {
-            var user = this.UserRepository.GetById(id);
+            var friendship = this.UserRepository.GetFriendship();
 
-            if (user == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.Mapper.Map<UserDto>(user);
+            return this.Mapper.Map<Dictionary<string, List<UserDto>>>(friendship);
         }
 
         [HttpGet]
-        [Route("/friendship/{id}")]
-        public ActionResult<IEnumerable<UserDto>> GetFriendships(int id)
+        [Route("api/[controller]/friendship/{id}")]
+        public ActionResult<IEnumerable<UserDto>> GetFriendshipsByUserId(int id)
         {
             var friendships = this.UserRepository.GetFriendshipByUserId(id);
 
@@ -60,20 +55,6 @@ namespace FriendsLessons.Controllers
             return this.Mapper.Map<List<UserDto>>(friendships);
         }
 
-        [HttpGet]
-        [Route("/lessons/{id}")]
-        public ActionResult<IEnumerable<UserDto>> GetLessons(int id)
-        {
-            var lessons = this.UserRepository.GetLessonsByUserId(id);
-
-            if (lessons == null)
-            {
-                return this.NotFound();
-            }
-
-            return this.Mapper.Map<List<UserDto>>(lessons);
-        }
-
-
+        
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FriendsLessons.Dto
 {
-    public class LessonsDto
+    public class LessonDto
     {
         public int Id { get; set; }
 

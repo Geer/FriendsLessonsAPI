@@ -12,10 +12,12 @@ namespace FriendsLesson.Dto
         {
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Lessons, opt => opt.MapFrom(src => src.StudentsLessons.Select(sl => sl.Lesson)));
+
             CreateMap<User, UserDto>()
-                .ForMember(dest => dest.Friends, opt => opt.MapFrom(src => src.Friendship.Select(f => f.You))).MaxDepth(2);
+                .ForMember(dest => dest.Friends, opt => opt.MapFrom(src => src.Friendship.Select(f => f.You))).MaxDepth(1);
 
         }
     }

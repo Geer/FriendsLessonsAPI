@@ -29,7 +29,7 @@ namespace FriendsLessons.Dto
             
         }
 
-        public ICollection<LessonsDto> Lessons { get; set; }
+        public ICollection<LessonDto> Lessons { get; set; }
 
         public ICollection<UserDto> Friends { get; set; }
 

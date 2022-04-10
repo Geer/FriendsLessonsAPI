@@ -16,18 +16,6 @@ namespace FriendsLessons.Repository
             this.Context = context;
         }
 
-        public User GetById(int Id)
-        {
-            return this.Context.Users
-                .Include(u => u.StudentsLessons)
-                    .ThenInclude(sl => sl.Lesson)
-                        .ThenInclude(l => l.Course)
-                .Include(u => u.Friendship)
-                    .ThenInclude(f => f.You)
-                .Where(u => u.Id == Id)
-                .FirstOrDefault();
-        }
-
         public IEnumerable<User> GetFriendshipByUserId(int id)
         {
             return this.Context.Users
@@ -36,13 +24,7 @@ namespace FriendsLessons.Repository
                 .Where(u => u.Id == id).FirstOrDefault().MyFriends;
         }
 
-        public IEnumerable<Lesson> GetLessonsByUserId(int id)
-        {
-            return this.Context.Users
-                .Include(u => u.StudentsLessons)
-                    .ThenInclude(sl => sl.Lesson)
-                .Where(u => u.Id == id).FirstOrDefault().Lessons;
-        }
+       
 
         public IEnumerable<User> GetList()
         {
@@ -52,6 +34,17 @@ namespace FriendsLessons.Repository
                         .ThenInclude(l => l.Course)
                 .Include(u => u.Friendship)
                     .ThenInclude(f => f.You);
+
+        }
+
+        public IDictionary<string, List<User>> GetFriendship()
+        {
+            var friendships = this.Context.Friendships
+                .Include(f => f.Me)
+                .Include(f => f.You);
+
+         return friendships.ToLookup(x => string.Format("{0} {1}", x.Me.FirstName, x.Me.LastName), x => x.You)
+                     .ToDictionary(x => x.Key, x => x.ToList());
 
         }
     }

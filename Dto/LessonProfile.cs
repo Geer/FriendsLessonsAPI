@@ -9,11 +9,11 @@ namespace FriendsLesson.Dto
     {
         public LessonProfile()
         {
-            CreateMap<Lesson, LessonsDto>()
+            CreateMap<Lesson, LessonDto>()
                 .ForMember(src => src.Course, opt => opt.MapFrom(src => src.Course));
 
-            CreateMap<Lesson, LessonsDto>()
-                .ForMember(src => src.Students, opt => opt.MapFrom(src => src.StudentsLessons.Select(sl => sl.User)));
+            CreateMap<Lesson, LessonDto>()
+                .ForMember(src => src.Students, opt => opt.MapFrom(src => src.StudentsLessons.Select(sl => sl.User))).MaxDepth(1);
         }
     }
 }
