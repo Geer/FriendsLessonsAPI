@@ -22,14 +22,6 @@ namespace FriendsLesson.Dto
 
             CreateMap<User, MiniUserDto>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
-
-            //CreateMap<Friendship, FriendshipDto>()
-            //    .ForMember(dest => dest.Me, opt => opt.MapFrom(src => src.Me));
-
-            //CreateMap<Friendship, FriendshipDto>()
-            //    .ForMember(dest => dest.Friends, opt => opt.MapFrom(src => src.You));
-
-
         }
     }
 }
