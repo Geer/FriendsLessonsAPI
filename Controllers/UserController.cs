@@ -27,26 +27,26 @@ namespace FriendsLessons.Controllers
 
         [HttpGet]
         [Route("api/users")]
-        public ActionResult<IEnumerable<MiniUserDto>> GetList()
+        public async Task<ActionResult<IEnumerable<MiniUserDto>>> GetList()
         {
-            var users =  this.UserRepository.GetList().ToList();
+            var users =  await this.UserRepository.GetList();
             return this.Mapper.Map<List<MiniUserDto>>(users);
         }
 
         [HttpGet]
         [Route("api/friendships")]
-        public IEnumerable<FriendshipDto> GetAllFrienships()
+        public async Task<IEnumerable<FriendshipDto>> GetAllFrienships()
         {
-            var friendship = this.UserRepository.GetFriendship();
+            var friendship = await this.UserRepository.GetFriendship();
 
             return this.MapAllFriendships(friendship);
         }
 
         [HttpGet]
         [Route("api/users/{id}/friendships")]
-        public ActionResult<IEnumerable<UserDto>> GetFriendshipsByUserId(int id)
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetFriendshipsByUserId(int id)
         {
-            var friendships = this.UserRepository.GetFriendshipByUserId(id);
+            var friendships = await this.UserRepository.GetFriendshipByUserId(id);
 
             if (friendships == null)
             {
@@ -58,9 +58,9 @@ namespace FriendsLessons.Controllers
 
         [HttpGet]
         [Route("api/users/{id}/lessons")]
-        public ActionResult<IEnumerable<LessonDto>> GetLessons(int id)
+        public async Task<ActionResult<IEnumerable<LessonDto>>> GetLessons(int id)
         {
-            var lessons = this.UserRepository.GetLessonsByUserId(id);
+            var lessons = await this.UserRepository.GetLessonsByUserId(id);
 
             return this.Mapper.Map<List<LessonDto>>(lessons);
         }

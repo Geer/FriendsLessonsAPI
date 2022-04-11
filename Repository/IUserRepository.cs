@@ -8,12 +8,12 @@ namespace FriendsLessons.Repository
 {
     public interface IUserRepository
     {
-        IEnumerable<User> GetList();
+        Task<IEnumerable<User>> GetList();
 
-        IDictionary<User, List<User>> GetFriendship();
+        Task<IDictionary<User, List<User>>> GetFriendship();
 
-        IEnumerable<User> GetFriendshipByUserId(int id);
+        Task<IEnumerable<User>> GetFriendshipByUserId(int id);
 
-        IEnumerable<Lesson> GetLessonsByUserId(int id);
+        Task<IEnumerable<Lesson>> GetLessonsByUserId(int id);
     }
 }

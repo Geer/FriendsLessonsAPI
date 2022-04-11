@@ -16,39 +16,50 @@ namespace FriendsLessons.Repository
             this.Context = context;
         }
 
-        public IEnumerable<User> GetFriendshipByUserId(int id)
-            => this.Context.Users
+        public async Task<IEnumerable<User>> GetFriendshipByUserId(int id)
+        {
+            var user = await this.Context.Users
                 .Include(u => u.Friendship)
                     .ThenInclude(f => f.You)
-                .Where(u => u.Id == id).FirstOrDefault()?.MyFriends;
+                .Where(u => u.Id == id).FirstOrDefaultAsync();
 
-        public IEnumerable<User> GetList()
-            => this.Context.Users
+            return user != null ? user.MyFriends : null;
+        }
+        public async Task<IEnumerable<User>> GetList()
+            => await this.Context.Users
                 .Include(u => u.StudentsLessons)
                     .ThenInclude(sl => sl.Lesson)
                         .ThenInclude(l => l.Course)
                 .Include(u => u.Friendship)
-                    .ThenInclude(f => f.You);
+                    .ThenInclude(f => f.You)
+                .ToListAsync();
 
 
-        public IDictionary<User, List<User>> GetFriendship()
+        public async Task<IDictionary<User, List<User>>> GetFriendship()
         {
-            var friendships = this.Context.Friendships
+            var friendships = await  this.Context.Friendships
                 .Include(f => f.Me)
                 .Include(f => f.You)
-                .ToList();
+                .ToListAsync();
 
-            var ep =  friendships.ToLookup(x => x.Me, x => x.You)
+            var ep = friendships.ToLookup(x => x.Me, x => x.You)
                         .ToDictionary(x => x.Key, x => x.ToList());
             return ep;
         }
 
 
-        public IEnumerable<Lesson> GetLessonsByUserId(int id)
-            => this.Context.Users
+        public async Task<IEnumerable<Lesson>> GetLessonsByUserId(int id)
+        {
+            var user = await this.Context.Users
                 .Include(u => u.StudentsLessons)
                     .ThenInclude(sl => sl.Lesson)
                         .ThenInclude(l => l.Course)
-                .Where(u => u.Id == id).FirstOrDefault()?.Lessons;
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
+            
+            return user != null ? user.Lessons : null;
+
+
+        }
     }
 }
