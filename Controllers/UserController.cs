@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FriendsLesson.Dto;
 using FriendsLessons.DbModels;
 using FriendsLessons.Dto;
 using FriendsLessons.Repository;
@@ -25,24 +26,24 @@ namespace FriendsLessons.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]")]
-        public ActionResult<IEnumerable<UserDto>> GetList()
+        [Route("api/users")]
+        public ActionResult<IEnumerable<MiniUserDto>> GetList()
         {
             var users =  this.UserRepository.GetList().ToList();
-            return this.Mapper.Map<List<UserDto>>(users);
+            return this.Mapper.Map<List<MiniUserDto>>(users);
         }
 
         [HttpGet]
-        [Route("api/[controller]/friendship")]
-        public ActionResult<IDictionary<string, List<UserDto>>> GetAllFrienships()
+        [Route("api/friendships")]
+        public IEnumerable<FriendshipDto> GetAllFrienships()
         {
             var friendship = this.UserRepository.GetFriendship();
 
-            return this.Mapper.Map<Dictionary<string, List<UserDto>>>(friendship);
+            return this.MapAllFriendships(friendship);
         }
 
         [HttpGet]
-        [Route("api/[controller]/friendship/{id}")]
+        [Route("api/users/{id}/friendships")]
         public ActionResult<IEnumerable<UserDto>> GetFriendshipsByUserId(int id)
         {
             var friendships = this.UserRepository.GetFriendshipByUserId(id);
@@ -55,6 +56,36 @@ namespace FriendsLessons.Controllers
             return this.Mapper.Map<List<UserDto>>(friendships);
         }
 
-        
+        [HttpGet]
+        [Route("api/users/{id}/lessons")]
+        public ActionResult<IEnumerable<LessonDto>> GetLessons(int id)
+        {
+            var lessons = this.UserRepository.GetLessonsByUserId(id);
+
+            return this.Mapper.Map<List<LessonDto>>(lessons);
+        }
+
+        private IEnumerable<FriendshipDto> MapAllFriendships(IDictionary<User, List<User>> friendships)
+        {
+            var ret = new List<FriendshipDto>();
+
+            foreach (var entry in friendships)
+            {
+                var key = this.Mapper.Map<MiniUserDto>(entry.Key);
+                var value = this.Mapper.Map<List<MiniUserDto>>(entry.Value.Select(u => u));
+
+                var dto = new FriendshipDto()
+                {
+                    Me = key,
+                    Friends = value
+                };
+
+                ret.Add(dto);
+            }
+
+            return ret;
+        }
+
+
     }
 }

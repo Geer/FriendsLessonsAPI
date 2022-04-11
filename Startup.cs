@@ -1,4 +1,3 @@
-using FriendsLesson.Repository;
 using FriendsLessons.DbModels;
 using FriendsLessons.Repository;
 using Microsoft.AspNetCore.Builder;
@@ -36,7 +35,6 @@ namespace FriendsLesson
                 => options.UseSqlServer("data source=.;initial catalog=frienslessons;Integrated Security=SSPI"));
 
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ILessonRepository, LessonRepository>();
 
             services.AddControllers();
             services.AddMvcCore()

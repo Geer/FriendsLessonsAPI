@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FriendsLesson.DbModels;
 using FriendsLessons.DbModels;
 using FriendsLessons.Dto;
 using System.Linq;
@@ -18,6 +19,16 @@ namespace FriendsLesson.Dto
 
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Friends, opt => opt.MapFrom(src => src.Friendship.Select(f => f.You))).MaxDepth(1);
+
+            CreateMap<User, MiniUserDto>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"));
+
+            //CreateMap<Friendship, FriendshipDto>()
+            //    .ForMember(dest => dest.Me, opt => opt.MapFrom(src => src.Me));
+
+            //CreateMap<Friendship, FriendshipDto>()
+            //    .ForMember(dest => dest.Friends, opt => opt.MapFrom(src => src.You));
+
 
         }
     }

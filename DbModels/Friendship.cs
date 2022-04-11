@@ -1,4 +1,5 @@
 ﻿using FriendsLessons.DbModels;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,5 +20,6 @@ namespace FriendsLesson.DbModels
 
         [ForeignKey(nameof(YourId))]
         public virtual User You { get; set; }
+
     }
 }

@@ -10,9 +10,10 @@ namespace FriendsLessons.Repository
     {
         IEnumerable<User> GetList();
 
-        IDictionary<string, List<User>> GetFriendship();
+        IDictionary<User, List<User>> GetFriendship();
 
         IEnumerable<User> GetFriendshipByUserId(int id);
 
+        IEnumerable<Lesson> GetLessonsByUserId(int id);
     }
 }
